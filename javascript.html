@@ -358,6 +358,7 @@
 						- [underscore@1.0.0](https://github.com/jashkenas/underscore/blob/1.0.0/underscore.js)
 						- [JavaScript Compat Table](http://kangax.github.io/compat-table/es5/)
 						- [JavaScript 秘密花园](http://bonsaiden.github.io/JavaScript-Garden/zh/)
+						- [JavaScript参考文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference)
 					</script>
 				</section>
 
@@ -387,7 +388,7 @@
 
 				<section data-markdown>
 					<script type="text/template">
-						### 2.2 预解释
+						### 2.2 定义提升
 					</script>
 				</section>
 
@@ -476,6 +477,326 @@
 					<h3>2.3 作用域</h3>
 				</section>
 
+				<section data-markdown>
+					<script type="text/template">
+						只有函数作用域
+
+						```
+						var i;
+
+						for (i = 0; i < 10; i++) {
+						  setTimeout(function() {
+						    return console.log(i);
+						  }, 1000);
+						}
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						```
+						"use strict";
+
+						var i;
+
+						for (i = 0; i < 10; i++) {
+						  let j = i
+						  setTimeout(function() {
+						    return console.log(j);
+						  }, 1000);
+						}
+						```
+
+						[DEMO](../code/let.html)
+					</script>
+				</section>
+
+				<section>
+					<h4>是词法作用域</h4>
+					<img src="./images/scriptscope.png" alt="" style="background-color: white;" />
+					<p>
+						<small>在解析函数表达式时，每个函数对象都包含一个隐变量[[Scope]]<br>即被解析时所处的执行环境的词法环境。</small>
+					</p>
+				</section>
+
+				<section>
+					<h4>闭包</h4>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### 随手写个闭包
+
+						```
+						(function (root, doc) {
+							var anythingYouWant = 'FUCK'
+						})(window, document)
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### 再写一个
+
+						```
+						function bar() {
+							var foo = 'foo'
+
+							return function () {
+								console.log(foo)
+							}
+						}
+
+						var bee = bar()
+
+						bee()  //foo
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### 用 CoffeeScript 写一个
+
+						```
+						bar = null
+						do ->
+						  do ->
+						    foo = 'foo'
+						    do ->
+						      bee = 'bee'
+						      do ->
+						        do ->
+						         bar = ->
+						           console.log foo + bee
+
+						bar() #foobee
+						```
+					</script>
+				</section>
+
+				<section>
+					<h4>闭包无处不在</h4>
+					<p>
+						<small>闭包源自 JavaScript 的词法作用域机制，广义上讲，闭包无处不在。</small>
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### 分步解读
+
+						```
+						// 1. 预编译
+						function bar() {
+							var foo = 'foo'
+
+							return function () {
+								console.log(foo)
+							}
+						}
+
+						// 2. 执行 bar 函数
+						// 3. 结果赋值给 bee
+						var bee = bar()
+
+						// 4. 执行 bee 函数
+						bee()  //foo
+						```
+					</script>
+				</section>
+
+				<section>
+					<h4>预编译</h4>
+					<img src="./images/le1.png" alt="" />
+				</section>
+
+				<section>
+					<h4>执行 bar 函数</h4>
+					<img src="./images/le2.png" alt="" />
+				</section>
+
+				<section>
+					<h4>结果赋值给 bee</h4>
+					<img src="./images/le3.png" alt="" />
+				</section>
+
+				<section>
+					<h4>执行 bee 函数</h4>
+					<img src="./images/le4.png" alt="" />
+				</section>
+
+				<section>
+					<h3>3.4 this this this</h3>
+					<p>
+						<small>一讲到 this 我就热血沸腾</small>
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### this 很 Java
+
+						```
+							var me = {
+								name: 'cunzhi',
+								introduce: function () {
+									alert(`hello, I am ${this.name}`)
+								}
+							}
+
+							me.introduce() // hello, I am cunzhi
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### this 也很灵活
+
+						```
+							var me = {
+								name: 'cunzhi',
+								introduce: function () {
+									alert(`hello, I am ${this.name}`)
+								}
+							}
+
+							var lujs = {
+								name: 'lujs'
+							}
+
+							me.introduce.call(lujs) // hello, I am lujs
+							// me.introduce.apply(lujs)
+						```
+					</script>
+				</section>
+
+
+				<section>
+					<h4>这么灵活，搞清楚 this 真的太头疼了！</h4>
+
+					<img src="./images/guaiwolo.png" alt="" style="background-color:white;" />
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						##### 规则1：函数是否由 new 调用？
+
+						```
+						var me;
+
+						me = {
+						  name: 'cunzhi',
+						  intro: (function() {
+						    return alert(this.name);
+						  })
+						};
+
+						new me.intro();
+						```
+					</script>
+				</section>
+
+
+				<section data-markdown>
+					<script type="text/template">
+						##### 规则2：通过 call，apply 调用？
+
+						```
+						var lujs, me;
+
+						lujs = {
+						  name: 'lujs'
+						};
+
+						me = {
+						  name: 'cunzhi',
+						  intro: (function() {
+						    return alert(this.name);
+						  })
+						};
+
+						me.intro.call(lujs);
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						##### 规则3：在某个上下文对象上调用？
+
+						```
+						var me;
+
+						me = {
+						  name: 'cunzhi',
+						  intro: (function() {
+						    return alert(this.name);
+						  })
+						};
+
+						me.intro();
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						##### 规则4：否则，默认绑定到全局对象
+
+						```
+						var me;
+
+						me = {
+						  name: 'cunzhi',
+						  intro: (function() {
+						    return alert(this.name);
+						  })
+						};
+
+						var intro = me.intro;
+						intro();
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						##### 规则5：例外情况 bind & =>
+
+						```
+						var intro, lujs, me;
+						lujs = {
+						  name: 'lujs'
+						};
+						me = {
+						  name: 'cunzhi'
+						};
+						intro = (function() {
+						  return alert(this.name);
+						}).bind(me);
+
+						intro(); // cunzhi
+						intro.call(lujs); // 'cunzhi'
+						new intro(); // undefined 对 new 无效
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### 3.5 推荐阅读
+
+						- [Standard ECMA-262](http://www.ecma-international.org/ecma-262/5.1/#sec-10) （[中文版](http://yanhaijing.com/es5/#117)）
+					</script>
+				</section>
+
+				<section>
+					<h2>4. 原型与继承</h2>
+				</section>
 			</div>
 
 		</div>
