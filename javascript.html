@@ -795,7 +795,410 @@
 				</section>
 
 				<section>
-					<h2>4. 原型与继承</h2>
+					<h2>4. 原型、类与继承</h2>
+
+					<p>
+						<small>原型是 JavaScript 实现继承，面向对象编程的基础</small>
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### 4.1 原型
+					</script>
+				</section>
+
+
+				<section data-markdown>
+					<script type="text/template">
+						<p style="font-style:italic">
+							object that provides shared properties for other objects.
+						</p>
+
+						<small style="text-align:right; display:block"> -- ECMAScript® Language Specification</small>
+
+						```
+						var dog;
+
+						dog = {
+						  color: 'white',
+						  bark: function() {
+						    return alert('wow');
+						  }
+						};
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### Object.create(proto, [propertiesObject])
+
+						```
+						var dog, redDog;
+						dog = {
+						  color: 'white',
+						  bark: function() {
+						    return alert('wow');
+						  }
+						};
+						redDog = Object.create(dog, {
+						  color: {
+						    value: 'red'
+						  }
+						});
+
+						alert(redDog.color); // red
+						redDog.bark() // wow
+						```
+					</script>
+				</section>
+
+				<section>
+					<img src="./images/prototype1.png" alt="" />
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### Function as Constructor
+
+						```
+						function Dog(color) {
+							if (color) {
+								this.color = color
+							}
+						}
+						Dog.prototype.color = 'white'
+						Dog.prototype.bark = function () {
+							alert('wow')
+						}
+						var redDog = new Dog('red')
+
+						alert(redDog.color); // red
+						redDog.bark() // wow
+
+						// Dog.prototype != Dog.__proto__
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### 4.2 原型链
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### 对象具备对象的原型
+
+						```
+						var dog, redDog;
+						dog = {
+						  color: 'white',
+						  bark: function() {
+						    return alert('wow');
+						  }
+						};
+
+						dog.__proto__ === Object.prototype // true
+
+						redDog = Object.create(dog, {
+						  color: {
+						    value: 'red'
+						  }
+						});
+						redDog.toString() // "[object Object]"
+						```
+					</script>
+				</section>
+
+				<section>
+					<img src="./images/prototype2.png" alt="" />
+				</section>
+
+				<section>
+					<img src="./images/prototype3.png" alt="" />
+				</section>
+
+
+				<section>
+					<h3>4.3 类</h3>
+				</section>
+
+				<section>
+					<h4>JavaScript 并没有类</h4>
+					<p>
+						<small>其 [类] 的本质就是就是基于 [[Prototype]] 的一种模仿实现</small>
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### “类” = （实例）数据 + （共享）方/算法
+
+						```
+						function Car(sColor,iDoors,iMpg) {
+						  this.color = sColor;
+						  this.doors = iDoors;
+						  this.mpg = iMpg;
+						  this.drivers = new Array("Mike","John");
+						}
+						Car.prototype.showColor = function() {
+						  alert(this.color);
+						};
+						var oCar1 = new Car("red",4,23);
+						var oCar2 = new Car("blue",3,25);
+
+						oCar1.drivers.push("Bill");
+
+						alert(oCar1.drivers);	//输出 "Mike,John,Bill"
+						alert(oCar2.drivers);	//输出 "Mike,John"
+						```
+					</script>
+				</section>
+
+
+				<section data-markdown>
+					<script type="text/template">
+						#### Backbone.*.extend
+
+						```
+						var Car = Backbone.View.extend({
+						  initialize: function(sColor, iDoors, iMpg) {
+						    this.color = sColor;
+						    this.doors = iDoors;
+						    this.mpg = iMpg;
+						    this.drivers = new Array("Mike", "John");
+						  },
+						  showColor: function() {
+						    alert(this.color);
+						  }
+						})
+						var oCar1 = new Car("red",4,23);
+						var oCar2 = new Car("blue",3,25);
+
+						oCar1.drivers.push("Bill");
+
+						alert(oCar1.drivers); //输出 "Mike,John,Bill"
+						alert(oCar2.drivers); //输出 "Mike,John"
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### Mootool's Class
+
+						```
+						var Car = new Class({
+						  initialize: function(sColor, iDoors, iMpg) {
+						    this.color = sColor;
+						    this.doors = iDoors;
+						    this.mpg = iMpg;
+						    this.drivers = new Array("Mike", "John");
+						  },
+						  showColor: function() {
+						    alert(this.color);
+						  }
+						});
+						var oCar1 = new Car("red", 4, 23);
+						var oCar2 = new Car("blue", 3, 25);
+
+						oCar1.drivers.push("Bill");
+
+						alert(oCar1.drivers); //输出 "Mike,John,Bill"
+						alert(oCar2.drivers); //输出 "Mike,John"
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### CoffeeScript's Class
+
+						```
+						class Car
+						  constructor: (sColor, iDoors, iMpg)->
+						    @color = sColor
+						    @doors = iDoors
+						    @mpg = iMpg
+						    @drivers = new Array('Mike', 'John')
+						  showColor: ->
+						    alert(@color)
+
+						oCar1 = new Car('red', 4, 23)
+						oCar2 = new Car('blue', 3, 25)
+
+						oCar1.drivers.push("Bill")
+
+						alert(oCar1.drivers) # 输出 "Mike,John,Bill"
+						alert(oCar2.drivers) # 输出 "Mike,John"
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### ES6's Class
+
+						```
+						class Car {
+						  constructor(sColor, iDoors, iMpg) {
+						    this.color = sColor
+						    this.doors = iDoors
+						    this.mpg = iMpg
+						    this.drivers = new Array('Mike', 'John')
+						  }
+						  showColor() {
+						    alert(this.color)
+						  }
+						}
+
+						oCar1 = new Car('red', 4, 23)
+						oCar2 = new Car('blue', 3, 25)
+
+						oCar1.drivers.push("Bill")
+
+						alert(oCar1.drivers) // 输出 "Mike,John,Bill"
+						alert(oCar2.drivers) // 输出 "Mike,John"
+						```
+					</script>
+				</section>
+
+				<section>
+					<h3>4.4 继承</h3>
+				</section>
+
+				<section>
+					<h4>JavaScript 的继承并不完美</h4>
+					<p>
+						<small>本质就是就是 <span style="color:yellow">原型链</span></small>
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### 将父类实例插入到原型链中
+
+						```
+						function Car(sColor,iDoors,iMpg) {
+						  this.color = sColor;
+						  this.doors = iDoors;
+						  this.mpg = iMpg;
+						  this.drivers = new Array("Mike","John");
+						}
+						Car.prototype.showColor = function() {
+						  alert(this.color);
+						};
+
+
+						/*function RollsRoyce() {
+							this.color = 'goden'
+
+						}
+						RollsRoyce.prototype.speeding = function (){
+							alert('PU-PU---PUPU')
+						}*/
+
+						function RollsRoyce() {
+							this.color = 'goden'
+							Car.apply(this)
+
+						}
+						RollsRoyce.prototype = new Car()
+						RollsRoyce.prototype.constructor = RollsRoyce
+						RollsRoyce.prototype.speeding = function (){
+							alert('PU-PU---PUPU')
+						}
+
+						oCar1 = new Car()
+						oCar2 = new RollsRoyce()
+
+
+						alert(oCar2.drivers) // 输出 "Mike,John"
+						oCar2.showColor() // 'undefined' WTF
+						oCar2.speeding() // 'PU-PU---PUPU'
+						oCar1.speeding() // Error
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### 反正大家都做好了，就用吧！
+
+						```
+						// Backbone
+						var RollsRoyce = Car.extend({
+							initialize: function () {
+								this.color = 'goden'
+							},
+							speeding: function () {
+								alert('PU-PU---PUPU')
+							}
+						})
+
+						// Mootool
+						var RollsRoyce = new Class({
+							Extends: Car,
+							initialize: function () {
+								this.color = 'goden'
+							},
+							speeding: function () {
+								alert('PU-PU---PUPU')
+							}
+						})
+
+						// CoffeeScript
+						class RollsRoyce extends Car
+							constructor: ->
+								@color = 'goden'
+							speeding: ->
+								alert('PU-PU---PUPU')
+
+						// ES6 Class
+						class RollsRoyce extends Car {
+							constructor() {
+								this.color = 'goden'
+							}
+							speeding() {
+								alert('PU-PU---PUPU')
+							}
+						}
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						#### 其他问题
+
+						- 多重继承难于实现
+						- 原型链污染
+						- Mixin
+					</script>
+				</section>
+
+
+				<section>
+					<h2>5. 杂项</h2>
+				</section>
+
+				<section>
+					<h3>5.1 Strict 模式</h3>
+				</section>
+
+				<section>
+					<h3>5.2 CoffeeScript 与 TypeScript</h3>
+				</section>
+
+				<section>
+					<h3>5.3 setTimeout、setInterval 和 requestAnimationFrame</h3>
+				</section>
+
+				<section>
+					<h3>5.4 DOM 事件</h3>
 				</section>
 			</div>
 
