@@ -486,7 +486,7 @@
 
 						for (i = 0; i < 10; i++) {
 						  setTimeout(function() {
-						    return console.log(i);
+						    console.log(i);
 						  }, 1000);
 						}
 						```
@@ -1073,7 +1073,7 @@
 				<section>
 					<h4>JavaScript 的继承并不完美</h4>
 					<p>
-						<small>本质就是就是 <span style="color:yellow">原型链</span></small>
+						<small><span style="color:yellow">原型链</span> 是基石</small>
 					</p>
 				</section>
 
@@ -1190,15 +1190,427 @@
 				</section>
 
 				<section>
+					<p>
+						Strict Mode 是一种更为严格的 JavaScript，
+						严格模式和非严格模式下对代码的处理方运行式是不一样的。
+					</p>
+				</section>
+
+
+				<section>
+					<h4>开启严格模式</h4>
+
+					<p>
+						<small>`"use strict";`  作为脚本或者函数的第一行可执行代码</small>
+					</p>
+
+					<pre><code><script>
+// use strict
+"use strict"
+var i;
+
+for (i = 0; i < 10; i++) {
+  let j = i
+  setTimeout(function() {
+    return console.log(j);
+  }, 1000);
+}
+</script>
+
+<script>
+function strict() {
+  // Function-level strict mode syntax
+  'use strict';
+
+  function nested() {
+    return "And so am I!";
+  }
+  return "Hi!  I'm a strict mode function!  " + nested();
+}
+
+function notStrict() {
+  return "I'm not strict.";
+}
+</script></code></pre>
+				</section>
+
+
+
+				<section>
+					<h4>变化1：手误变错误</h4>
+
+					<ul>
+						<li>禁止全局变量</li>
+						<li>赋值/扩展/删除无法赋值/扩展/删除的变量/对象/属性时报错</li>
+						<li>同一对象属性名唯一</li>
+						<li>同一函数参数名唯一</li>
+						<li>禁止八进制数表示法</li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>变化2：简化变量的使用</h4>
+
+					<ul>
+						<li>禁用 <code>with</code> 语句</li>
+						<li><code>eval('var x;') 在新的词法作用域里执行</code></li>
+						<li>严格模式下调用 <code>eval(str)</code>，<code>str</code> 里的代码也在严格模式下执行</li>
+						<li><code>delete</code> 通常的变量，报错</li>
+					</ul>
+
+					<pre>
+						<code>"use strict";
+
+var x;
+delete x; // !!! syntax error
+
+eval("var y; delete y;"); // !!! syntax error</code>
+					</pre>
+				</section>
+
+				<section>
+					<h4>变化3：简化 <code>eval</code> 和 <code>arguments</code></h4>
+
+					<ul>
+						<li><code>eval</code> 和 <code>arguments</code> 无法被赋值，被传递</li>
+						<li><code>arguments</code> 不再跟踪参数的变化</li>
+						<li>不再支持 <code>arguments.callee</code></li>
+					</ul>
+				</section>
+
+
+				<section>
+					<h4>变化4：更安全的 JavaScript</h4>
+
+					<li><code>this</code> 绑定不为对象或者没有绑定时，执行上下文中的 <code>this</code> 为 <code>undefined</code></li>
+					<li>禁用 <code>[Function].caller</code> 和 <code>[Function].arguments</code></li>
+					<li>禁用 <code>arguments.caller</code></li>
+				</section>
+
+
+				<section>
+					<h4>变化5：为未来的 ECMAScript 铺路</h4>
+
+					<ul>
+						<li>增加 implements, interface, let, package, private, protected, public, static, 和 yield 为保留字</li>
+						<li>函数申明必须在全局或者函数的顶级作用域</li>
+					</ul>
+
+					<pre>
+						<code>"use strict";
+if (true){
+  function f() { } // !!! syntax error
+  f();
+}
+
+for (var i = 0; i < 5; i++){
+  function f2() { } // !!! syntax error
+  f2();
+}
+
+function baz(){ // kosher
+  function eit() { } // also kosher
+}</code>
+					</pre>
+				</section>
+
+				<section>
 					<h3>5.2 CoffeeScript 与 TypeScript</h3>
 				</section>
 
 				<section>
-					<h3>5.3 setTimeout、setInterval 和 requestAnimationFrame</h3>
+					<h3>CoffeeScript</h3>
+					<p style="font-style:italic; text-align:left">
+						<small>CoffeeScript is an attempt to expose the good parts of JavaScript in a simple way.<br></small>
+						<small>The golden rule of CoffeeScript is: "It's just JavaScript".</small>
+					</p>
+					<p style="text-align:right">
+						<small><a href="http://coffeescript.org" target="_blank">http://coffeescript.org</a></small>
+					</p>
+				</section>
+
+				<section>
+					<img src="./images/wR3ZxfB.jpg" alt="" />
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### CoffeeScript 的优点
+
+						-	大量的语法糖（与 Python、Ruby 相似的语法）
+						- 自动管理变量的声明和使用
+						- 完善的 OOP 方案
+						- 节省超过 1/3 的代码量
+						- 编译出的 JS 代码同样优雅，性能甚至超过自己手写的 JS 代码
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### CoffeeScript 取得的成就
+
+						- [Github](https://github.com/)
+						-	[Atom](https://atom.io/)
+						- [zappa](http://zappajs.github.io/zappajs/)
+						- [Trello](https://trello.com/)
+						- [Teambition](https://www.teambition.com/)
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### CoffeeScript 缺点
+
+						- 没有自己的运行时
+						- 永远是 JavaScript 的小弟
+						- ES6 （JavaScript.Next）
+					</script>
+				</section>
+
+				<section>
+					<h3>TypeScript</h3>
+
+					<p style="text-align: left">
+						TypeScript is a superset of JavaScript that compiles to clean JavaScript output.
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### TypeScript 的优点
+
+						- 超集，兼容老的 JavaScript 代码
+						- 兼容 ES6
+						- 类型和类型的静态检查（IDE）
+						- C# 那些强迫症患者想要的特性（Interface 等）
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### TypeScript 取得的成就
+
+						- [Angular 2.0](https://angular.io/) 基于 TypeScript
+						- [NativeScript](http://www.nativescript.org/)
+						- 微软的人在用？
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### 还是 JavaScript 大法好！
+
+						> 前端工程师用 JavaScript，C# 工程师用 TypeScript，Ruby 工程师用 CoffeeScript，Java 工程师用 Dart。
+					</script>
+				</section>
+
+
+				<section>
+					<h3>5.3 setTimeout、setInterval、requestAnimationFrame 和 setImmediate</h3>
+				</section>
+
+
+				<section data-markdown>
+					<script type="text/template">
+						### 5.3.1 setTimeout 和 setInterval
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### 绝对是异步的
+
+						```
+						setTimeout(function() {
+						  return console.log('first');
+						}, 0);
+
+						setTimeout(function() {
+						  return console.log('second');
+						}, -1);
+
+						console.log('thrid');
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### 回忆一下这个例子
+
+						```
+						var i;
+
+						for (i = 0; i < 10; i++) {
+						  setTimeout(function() {
+						    console.log(i);
+						  }, 0);
+						}
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### 延迟的时间是无法绝对保证的
+
+						```
+						var delay;
+						delay = function(time) {
+						  var start;
+						  start = new Date;
+						  setTimeout(function() {
+						    var end;
+						    end = new Date;
+						    console.log("计划延迟 " + time + " 毫秒执行");
+						    console.log("实际延迟了 " + (end.getTime() - start.getTime()) + " 毫秒");
+						  }, time);
+						};
+
+						delay(-1);
+						delay(0);
+						delay(1);
+						delay(1000);
+						```
+					</script>
+				</section>
+
+				<section>
+					<img src="./images/Timers.png" alt="" />
+				</section>
+
+				<section>
+					<h3>5.3.2 requestAnimationFrame</h3>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						```
+						var count, last, run;
+
+						count = 20;
+						last = new Date;
+
+						run = function() {
+						  var i, now;
+						  if (count--) {
+						    now = new Date;
+						    console.log("过去了 " + (now.getTime() - last.getTime()) + " 毫秒");
+						    last = now;
+						    requestAnimationFrame(run);
+
+						    i = 10000;
+						    while (i--) {
+						      document.querySelectorAll('*');
+						    }
+						  }
+						};
+
+						run();
+						```
+					</script>
+				</section>
+
+				<section>
+					<h3>5.3.3 setImmediate（Microsoft & Node）</h3>
+				</section>
+
+				<section>
+					<h3>插入到事件队列的头部</h3>
+
+					<p>
+						<small><code>process.nextTick()</code> 插入到同步执行完的尾部，即在 <code>setImmediate</code> 之前</small>
+					</p>
+				</section>
+
+				<section>
+					<h3>顺序</h3>
+					<p>
+						<small>Async Code -> process.nextTick -> I/O events -> setImmediate -> Timer(setTimeout & setInterval)</small>
+					</p>
+
+					<p>
+						<small>requestAnimationFrame</small>
+					</p>
 				</section>
 
 				<section>
 					<h3>5.4 DOM 事件</h3>
+				</section>
+
+
+				<section>
+					<h3>捕获和冒泡</h3>
+
+					<p>
+						<small><code>focus</code>、<code>blur</code>	等事件是不冒泡的</small>
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Event 实例与调用顺序
+
+						```
+						myButton.addEventListener('click', function(event) {
+						  alert('click button');
+						}, false);
+
+						document.body.addEventListener('click', function(evt) {
+						  alert('click body 1');
+						}, false);
+
+						document.body.addEventListener('click', function(e) {
+						  alert('click body 2');
+						}, false);
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### preventDefault 和 stopPropagation
+
+						- `preventDefault` 阻止事件触发的默认行为，比如打开超链接
+						- `stopPropagation` 阻止事件向上冒泡
+					</script>
+				</section>
+
+
+				<section>
+					<h2>6. 异步编程</h2>
+				</section>
+
+				<section>
+					<h3>5.1 Promise</h3>
+				</section>
+
+				<section>
+					<h3>5.2 产生器（yield）</h3>
+				</section>
+
+				<section>
+					<h3>5.3 async/await</h3>
+				</section>
+
+				<section>
+					<h2>7. 模块化开发</h2>
+				</section>
+
+				<section>
+					<h2>7.1 我们是怎么做模块化开发的？</h2>
+				</section>
+
+				<section>
+					<h2>7.2 AMD</h2>
+				</section>
+
+				<section>
+					<h2>7.2 CommonJS</h2>
+				</section>
+
+				<section>
+					<h2>7.2 ES6 Module</h2>
 				</section>
 			</div>
 
