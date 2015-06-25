@@ -1582,7 +1582,119 @@ function baz(){ // kosher
 				</section>
 
 				<section>
+					<h3>callback 是最常见的异步形式</h3>
+				</section>
+
+				<section>
 					<h3>5.1 Promise</h3>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						读取 `package.json` 文件
+
+						```
+						var fs = require('fs')
+						var path = require('path')
+
+						function readPackageJson(callback) {
+						  var filePath = path.join(__dirname, '../package.json')
+						  fs.readFile(filePath, 'utf8', function (err, data) {
+						    if (err) {
+						      callback(err)
+						    } else {
+						      try {
+						        data = JSON.parse(data)
+						        callback(null, data)
+						      } catch (e) {
+						        callback(e)
+						      }
+						    }
+						  })
+						}
+
+						readPackageJson(function (err, data) {
+						  if (err) {
+						    console.log(err)
+						  } else {
+						    console.log(data)
+						  }
+						})
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### callback 的两个问题
+
+						- 可靠性
+						- 异步流程控制
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Promise
+
+						```
+						new Promise(function(resolve, reject) {
+							// resolve(result)
+
+							// reject(error)
+						})
+						```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						使用 `Promise` 改写 `readPackageJson`
+
+						```
+						var fs = require('fs')
+						var path = require('path')
+
+						function readPackageJson() {
+						  var filePath = path.join(__dirname, '../package.json')
+						  return new Promise(function(resolve, reject) {
+						    fs.readFile(filePath, 'utf8', function(err, data) {
+						      if (err) {
+						        reject(err)
+						      } else {
+						        try {
+						          data = JSON.parse(data)
+						          resolve(data)
+						        } catch (e) {
+						          reject(e)
+						        }
+						      }
+						    })
+						  })
+						}
+
+						var p = readPackageJson()
+
+						p.then(function(data) {
+						  console.log(data)
+						}).catch(function(err) {
+						  console.log(err)
+						})
+						```
+					</script>
+				</section>
+
+				<section>
+					<h3>Promise 提供可靠性</h3>
+					<img src="./images/promise-states.png" alt="" />
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						### Promise 中的流程控制
+
+
+					</script>
 				</section>
 
 				<section>
